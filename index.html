@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Glass Calculator</title>
+  <style>
+    :root {
+      --bg: #f2f2f2;
+      --text: #222;
+      --panel: rgba(255, 255, 255, 0.7);
+      --btn-bg: rgba(255, 255, 255, 0.3);
+      --btn-hover: rgba(255, 255, 255, 0.5);
+      --shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    body.dark {
+      --bg: #121212;
+      --text: #fff;
+      --panel: rgba(40, 40, 40, 0.8);
+      --btn-bg: rgba(80, 80, 80, 0.3);
+      --btn-hover: rgba(80, 80, 80, 0.5);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      height: 100vh;
+      padding-top: 40px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .calculator {
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 25px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .toggle-mode {
+      background: var(--btn-bg);
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .toggle-mode:hover {
+      background: var(--btn-hover);
+    }
+
+    input#expression {
+      width: 100%;
+      padding: 16px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: var(--btn-bg);
+      color: var(--text);
+    }
+
+    #result {
+      width: 100%;
+      padding: 14px;
+      font-size: 20px;
+      border-radius: 12px;
+      background: var(--btn-bg);
+      color: #4caf50;
+      margin-bottom: 12px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--btn-bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--btn-hover);
+    }
+
+    .history {
+      margin-top: 10px;
+    }
+
+    .history h3 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .history ul {
+      list-style: none;
+      padding: 0;
+      font-size: 13px;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+
+    .history li {
+      border-bottom: 1px dashed var(--text);
+      padding: 3px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="calculator">
+  <div class="header">
+    <h2>🧮 Calculator</h2>
+    <div class="toggle-mode" onclick="toggleDarkMode()">🌗 Mode</div>
+  </div>
+
+  <input type="text" id="expression" placeholder="Enter expression like: 2^3 + sqrt(16)">
+  <div id="result">Result: </div>
+
+  <div class="buttons">
+    <button class="btn">7</button><button class="btn">8</button><button class="btn">9</button><button class="btn">/</button><button class="btn">sqrt(</button>
+    <button class="btn">4</button><button class="btn">5</button><button class="btn">6</button><button class="btn">*</button><button class="btn">^</button>
+    <button class="btn">1</button><button class="btn">2</button><button class="btn">3</button><button class="btn">-</button><button class="btn">log(</button>
+    <button class="btn">0</button><button class="btn">.</button><button class="btn">%</button><button class="btn">+</button><button class="btn">ln(</button>
+    <button class="btn">(</button><button class="btn">)</button><button class="btn">π</button><button class="btn">e</button><button class="btn" onclick="backspace()">⌫</button>
+    <button class="btn">sin(</button><button class="btn">cos(</button><button class="btn">tan(</button><button class="btn" onclick="clearInput()">C</button><button class="btn" onclick="useAns()">Ans</button>
+  </div>
+
+  <div class="history">
+    <h3>📜 History</h3>
+    <ul id="historyList"></ul>
+    <button class="btn" onclick="exportHistoryPDF()">Export PDF</button>
+<button class="btn" onclick="exportHistoryText()">Export TXT</button>
+
+
+  </div>
+</div>
+
+<script>
+  const input = document.getElementById('expression');
+  const resultDiv = document.getElementById('result');
+  const historyList = document.getElementById('historyList');
+  let lastResult = 0;
+
+  document.querySelectorAll('.btn').forEach(button => {
+    if (!button.hasAttribute('onclick')) {
+      button.addEventListener('click', () => {
+        const val = button.innerText;
+        if (val === 'π') input.value += 'Math.PI';
+        else if (val === 'e') input.value += 'Math.E';
+        else input.value += val;
+        calculate();
+      });
+    }
+  });
+
+  input.addEventListener('input', calculate);
+
+  function clearInput() {
+    input.value = '';
+    resultDiv.textContent = 'Result: ';
+  }
+
+  function backspace() {
+    input.value = input.value.slice(0, -1);
+    calculate();
+  }
+
+  function useAns() {
+    input.value += lastResult;
+    calculate();
+  }
+
+  function calculate() {
+    let expr = input.value;
+    try {
+      expr = expr.replace(/\^/g, '**');
+      const func = new Function('return ' + expr
+        .replace(/sqrt/g, 'Math.sqrt')
+        .replace(/log\(/g, 'Math.log10(')
+        .replace(/ln\(/g, 'Math.log(')
+        .replace(/sin/g, 'Math.sin')
+        .replace(/cos/g, 'Math.cos')
+        .replace(/tan/g, 'Math.tan')
+      );
+      const result = func();
+      if (!isNaN(result)) {
+        lastResult = result;
+        resultDiv.textContent = 'Result: ' + result;
+        updateHistory(expr, result);
+      }
+    } catch (e) {
+      resultDiv.textContent = '';
+    }
+  }
+
+  function updateHistory(expression, result) {
+    const item = document.createElement('li');
+    item.textContent = `${expression} = ${result}`;
+    historyList.prepend(item);
+    if (historyList.children.length > 10) {
+      historyList.removeChild(historyList.lastChild);
+    }
+  }
+
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark');
+  }
+  function exportHistoryPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFontSize(14);
+  doc.text("Calculator History", 10, 10);
+
+  const items = Array.from(historyList.children).map((li, i) =>
+    `${i + 1}. ${li.textContent}`
+  );
+
+  let y = 20;
+  items.forEach(item => {
+    doc.text(item, 10, y);
+    y += 10;
+  });
+
+  doc.save("calculator_history.pdf");
+}
+
+function exportHistoryText() {
+  const items = Array.from(historyList.children).map(li => li.textContent);
+  const blob = new Blob([items.join("\n")], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "calculator_history.txt";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>

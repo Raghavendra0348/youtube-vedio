@@ -1,0 +1,126 @@
+   :root {
+      --bg: #f2f2f2;
+      --text: #222;
+      --panel: rgba(255, 255, 255, 0.7);
+      --btn-bg: rgba(255, 255, 255, 0.3);
+      --btn-hover: rgba(255, 255, 255, 0.5);
+      --shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    body.dark {
+      --bg: #121212;
+      --text: #fff;
+      --panel: rgba(40, 40, 40, 0.8);
+      --btn-bg: rgba(80, 80, 80, 0.3);
+      --btn-hover: rgba(80, 80, 80, 0.5);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      height: 100vh;
+      padding-top: 40px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .calculator {
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 25px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .toggle-mode {
+      background: var(--btn-bg);
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .toggle-mode:hover {
+      background: var(--btn-hover);
+    }
+
+    input#expression {
+      width: 100%;
+      padding: 16px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: var(--btn-bg);
+      color: var(--text);
+    }
+
+    #result {
+      width: 100%;
+      padding: 14px;
+      font-size: 20px;
+      border-radius: 12px;
+      background: var(--btn-bg);
+      color: #4caf50;
+      margin-bottom: 12px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--btn-bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--btn-hover);
+    }
+
+    .history {
+      margin-top: 10px;
+    }
+
+    .history h3 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .history ul {
+      list-style: none;
+      padding: 0;
+      font-size: 13px;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+
+    .history li {
+      border-bottom: 1px dashed var(--text);
+      padding: 3px 0;
+    }
