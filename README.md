@@ -1,4 +1,5 @@
 🔬 Scientific Calculator
+
 A Scientific Calculator built with precision and enhanced functionalities to perform both basic and advanced mathematical operations. Designed for developers, students, and professionals who need a reliable tool for complex calculations directly in their browser or application environment.
 
 🚀 Features
