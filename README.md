@@ -2,7 +2,8 @@
 
 A Scientific Calculator built with precision and enhanced functionalities to perform both basic and advanced mathematical operations. Designed for developers, students, and professionals who need a reliable tool for complex calculations directly in their browser or application environment.
 
-🚀 Features
+🚀 Features:
+
 ✅ Basic arithmetic operations: +, -, ×, ÷
 
 🧮 Advanced scientific functions:
@@ -28,32 +29,27 @@ Factorial: n!
 🛠️ Technologies Used
 Frontend: HTML, CSS, JavaScript
 
-Framework/Library: [Optional, like React/Bootstrap]
-
 Logic Engine: Pure JavaScript functions for precise calculations
 
 📂 Project Structure
-bash
-Copy
-Edit
+
 /scientific-calculator
 ├── index.html
 ├── style.css
 ├── script.js
 └── README.md
 🖥️ Usage
+
 Clone the repository:
 
-bash
-Copy
-Edit
-git clone https://github.com/yourusername/scientific-calculator.git
+git clone https://github.com/Raghavendra@0348/youtube-vedio.git
+
 Open the index.html file in your browser.
 
 No additional dependencies required.
 
-📷 Screenshots
-(Add screenshots of your calculator interface here)
+
+
 
 🧠 How It Works
 The calculator takes user input through buttons or keyboard strokes and parses the expression string. It then evaluates the result based on operator precedence and applies mathematical functions using JavaScript's built-in Math object. Custom logic is added to handle edge cases and invalid input gracefully.
